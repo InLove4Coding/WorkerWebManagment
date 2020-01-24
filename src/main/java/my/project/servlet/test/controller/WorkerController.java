@@ -54,4 +54,19 @@ public class WorkerController extends HttpServlet {
         writer.println(result);
         writer.close();
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String parameter = req.getHeader("dSurname");
+        PrintWriter writer = resp.getWriter();
+
+        if (parameter != null) {
+            WorkerService workerService = new WorkerService();
+            workerService.deleteWorkerBySurname(parameter);
+            writer.println("Delete worker:" + parameter);
+        } else {
+            writer.println("Вы ничего не ввели");
+        }
+    }
+
 }

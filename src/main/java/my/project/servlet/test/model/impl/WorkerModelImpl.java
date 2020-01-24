@@ -10,11 +10,11 @@ public class WorkerModelImpl implements WorkerModel {
     private final String USERNAME = "root";
     private final String PASSWORD = "admin";
     public final String SELECT_WORKER_BY_ID = "SELECT * FROM workers WHERE id=?";
-    //  public static final String ADD_NEW_WORKER = "INSERT INTO workers VALUES (?,?,?,?,?)";
-    public static final String ADD_WORKER = "INSERT INTO workers(`surname`) VALUES(?)";
+    public final String DELETE_WORKER_BY_SURNAME = "DELETE FROM workers WHERE surname=?";
+    public final String ADD_WORKER = "INSERT INTO workers(`surname`) VALUES(?)";
     Connection connection;
 
-     public WorkerModelImpl()  {
+    public WorkerModelImpl() {
         try {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -66,6 +66,21 @@ public class WorkerModelImpl implements WorkerModel {
             e.printStackTrace();
             return false;
         }
+        return true;
+    }
+
+    public boolean deleteWorkerBySurname(String surname) {
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE_WORKER_BY_SURNAME);
+            statement.setString(1, surname);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
         return true;
     }
 

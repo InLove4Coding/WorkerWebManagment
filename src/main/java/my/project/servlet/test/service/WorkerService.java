@@ -19,4 +19,9 @@ public class WorkerService {
         return workerModel.addWorkerToDB(worker);
     }
 
+    public boolean deleteWorkerBySurname(String string) {
+
+        return workerModel.deleteWorkerBySurname(string);
+    }
+
 }
