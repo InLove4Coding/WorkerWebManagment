@@ -11,4 +11,6 @@ public interface WorkerModel {
 
     boolean deleteWorkerBySurname(String surname);
 
+    boolean updateWorkerSalaryBySurname(String surname, int salary);
+
 }

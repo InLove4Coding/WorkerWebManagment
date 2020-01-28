@@ -12,6 +12,7 @@ public class WorkerModelImpl implements WorkerModel {
     public final String SELECT_WORKER_BY_ID = "SELECT * FROM workers WHERE id=?";
     public final String DELETE_WORKER_BY_SURNAME = "DELETE FROM workers WHERE surname=?";
     public final String ADD_WORKER = "INSERT INTO workers(`surname`) VALUES(?)";
+    public final String UPDATE_WORKER_SALARY_BY_SURNAME = "UPDATE workers SET salary=? WHERE surname=?";
     Connection connection;
 
     public WorkerModelImpl() {
@@ -81,6 +82,22 @@ public class WorkerModelImpl implements WorkerModel {
         }
 
 
+        return true;
+    }
+
+    public boolean updateWorkerSalaryBySurname(String surname, int salary) {
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_WORKER_SALARY_BY_SURNAME);
+            statement.setInt(1, salary);
+            statement.setString(2, surname);
+            statement.execute();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 

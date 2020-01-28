@@ -69,4 +69,24 @@ public class WorkerController extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String surname = req.getHeader("enterSurname");
+        String salary = req.getHeader("updateSalary");
+        int sal = 0;
+        PrintWriter writer = resp.getWriter();
+
+        if (surname != null && salary != null) {
+            sal = Integer.parseInt(salary);
+            WorkerService workerService = new WorkerService();
+            if (workerService.updateWorkerSalaryBySurname(surname, sal) == true) {
+                writer.println("Зарплата " + surname + " теперь равна: " + sal);
+            } else writer.println("Запись в бд не удалась");
+
+        }
+
+
+    }
+
+
 }

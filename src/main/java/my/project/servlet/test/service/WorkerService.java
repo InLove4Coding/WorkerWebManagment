@@ -24,4 +24,9 @@ public class WorkerService {
         return workerModel.deleteWorkerBySurname(string);
     }
 
+    public boolean updateWorkerSalaryBySurname(String string, int salary) {
+
+        return workerModel.updateWorkerSalaryBySurname(string, salary);
+    }
+
 }
