@@ -10,8 +10,9 @@ public class WorkerModelImpl implements WorkerModel {
     private final String USERNAME = "root";
     private final String PASSWORD = "admin";
     public final String SELECT_WORKER_BY_ID = "SELECT * FROM workers WHERE id=?";
+    // i need it to expand my project    public final String SELECT_WORKER_BY_ID = "SELECT * FROM workers as w JOIN organisation_workers as o WHERE id=?";
     public final String DELETE_WORKER_BY_SURNAME = "DELETE FROM workers WHERE surname=?";
-    public final String ADD_WORKER = "INSERT INTO workers(`surname`) VALUES(?)";
+    public final String ADD_WORKER = "INSERT INTO workers(`surname`,position,salary) VALUES(?,?,?)";
     public final String UPDATE_WORKER_SALARY_BY_SURNAME = "UPDATE workers SET salary=? WHERE surname=?";
     Connection connection;
 
@@ -50,6 +51,9 @@ public class WorkerModelImpl implements WorkerModel {
             worker.setId(resultSet.getInt("id"));
             String s = resultSet.getString("surname");
             worker.setSurname(resultSet.getString("surname"));
+            String p = resultSet.getString("position");
+            worker.setPosition(resultSet.getString("position"));
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -61,6 +65,8 @@ public class WorkerModelImpl implements WorkerModel {
         try {
             PreparedStatement statement = connection.prepareStatement(ADD_WORKER);
             statement.setString(1, worker.getSurname());
+            statement.setString(2, worker.getPosition());
+            statement.setInt(3, worker.getSalary());
             statement.execute();
 
         } catch (SQLException e) {

@@ -1,6 +1,7 @@
 package my.project.servlet.test.controller;
 
 import my.project.servlet.test.model.domain.Worker;
+import my.project.servlet.test.model.domain.WorkerVM;
 import my.project.servlet.test.service.WorkerService;
 
 import javax.servlet.ServletException;
@@ -15,73 +16,75 @@ import java.io.PrintWriter;
 @WebServlet("/get_worker")
 public class WorkerController extends HttpServlet {
 
-    private WorkerService workerService = new WorkerService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String parameter = req.getHeader("xSurname");
+        String jsonString = req.getHeader("add");
         PrintWriter writer = resp.getWriter();
-
-        if (parameter != null) {
+        WorkerService workerService = new WorkerService();
+        WorkerVM workerVM = new WorkerVM(jsonString);
+        if (jsonString != null) {
             Worker worker = new Worker();
-            worker.setSurname(parameter);
+            worker.setSurname(workerVM.getSurname());
+            worker.setPosition(workerVM.getPosition());
+            worker.setSalary(workerVM.getSalary());
             workerService.addWorkerToDB(worker);
             writer.println("ok");
         } else writer.println("insert parameter,pls");
-        writer.close();
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        int id = 0;
-        String parameter = req.getParameter("id");
+        String jsonString = req.getHeader("getById");
         PrintWriter writer = resp.getWriter();
+        WorkerService workerService = new WorkerService();
+        WorkerVM workerVM = new WorkerVM(jsonString);
 
-        if (parameter != null) {
-            try {
-                id = Integer.parseInt(parameter);
-            } catch (Exception e) {
-                writer.println("id must be Integer");
-            }
-        } else {
-            writer.println("id not found, set id");
+        if (jsonString != null) {
+            Worker worker = workerService.getWorkerByID(workerVM.getId());
+            String result = worker.toJson().toJSONString();
+            writer.println(result);
+            writer.close();
         }
 
-        Worker worker = workerService.getWorkerByID(id);
-        String result = worker.toJson().toJSONString();
-        writer.println(result);
-        writer.close();
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String parameter = req.getHeader("dSurname");
+        String jsonString = req.getHeader("delete");
         PrintWriter writer = resp.getWriter();
 
-        if (parameter != null) {
+        if (jsonString != null) {
+            WorkerVM workerVM = new WorkerVM(jsonString);
+            Worker worker = new Worker();
+            worker.setSurname(workerVM.getSurname());
             WorkerService workerService = new WorkerService();
-            workerService.deleteWorkerBySurname(parameter);
-            writer.println("Delete worker:" + parameter);
-        } else {
-            writer.println("Вы ничего не ввели");
+            if (workerService.deleteWorkerBySurname(worker.getSurname()) == true) {
+                writer.println("Deleted worker:" + worker.getSurname());
+            } else {
+                writer.println("You dont input something");
+            }
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String surname = req.getHeader("enterSurname");
-        String salary = req.getHeader("updateSalary");
-        int sal = 0;
+        String jsonString = req.getHeader("update");
+        WorkerVM workerVM = new WorkerVM(jsonString);
+        Worker worker = new Worker();
+        worker.setSurname(workerVM.getSurname());
+        worker.setSalary(workerVM.getSalary());
         PrintWriter writer = resp.getWriter();
 
-        if (surname != null && salary != null) {
-            sal = Integer.parseInt(salary);
+        if (workerVM.isCorrect()) {
+
             WorkerService workerService = new WorkerService();
-            if (workerService.updateWorkerSalaryBySurname(surname, sal) == true) {
-                writer.println("Зарплата " + surname + " теперь равна: " + sal);
-            } else writer.println("Запись в бд не удалась");
+            if (workerService.updateWorkerSalaryBySurname(workerVM.getSurname(), workerVM.getSalary()) == true) {
+                writer.println("Write is ok");
+            } else writer.println("Fail to write a DataBase");
 
         }
 

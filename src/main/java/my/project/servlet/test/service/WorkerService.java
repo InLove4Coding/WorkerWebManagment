@@ -12,7 +12,7 @@ public class WorkerService {
     public Worker getWorkerByID(int id) {
 
         return workerModel.getWorkerByID(id);
-    }
+        }
 
     public boolean addWorkerToDB(Worker worker) {
 
