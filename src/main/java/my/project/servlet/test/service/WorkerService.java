@@ -1,3 +1,4 @@
+/*
 package my.project.servlet.test.service;
 
 import my.project.servlet.test.model.WorkerModel;
@@ -21,12 +22,13 @@ public class WorkerService {
 
     public boolean deleteWorkerBySurname(String string) {
 
-        return workerModel.deleteWorkerBySurname(string);
+        return workerModel.deleteWorker();
     }
 
     public boolean updateWorkerSalaryBySurname(String string, int salary) {
 
-        return workerModel.updateWorkerSalaryBySurname(string, salary);
+        return workerModel.updateWorker(string, salary);
     }
 
 }
+*/

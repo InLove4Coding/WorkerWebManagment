@@ -2,15 +2,21 @@ package my.project.servlet.test.model;
 
 import my.project.servlet.test.model.domain.Worker;
 
+import java.util.List;
+
 
 public interface WorkerModel {
 
-    Worker getWorkerByID(int id);
+    Worker getWorker(Worker worker);
+
+    Worker getWorkerById(int i);
 
     boolean addWorkerToDB(Worker worker);
 
-    boolean deleteWorkerBySurname(String surname);
+    boolean deleteWorker(Worker worker);
 
-    boolean updateWorkerSalaryBySurname(String surname, int salary);
+    boolean updateWorker(Worker worker);
+
+    List<Worker> getListWorker();
 
 }
