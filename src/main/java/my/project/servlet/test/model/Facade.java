@@ -43,7 +43,7 @@ public class Facade implements FacadeModel {
         return organisationModel.getOrgById(id);
     }
 
-    Worker getWorkerByID(int id) {
+    public Worker getWorkerByID(int id) {
         Worker worker = workerModel.getWorkerById(id);
         List<Position> positionList = positionModel.byWorkerID(worker);
         for (Position pos : positionList
