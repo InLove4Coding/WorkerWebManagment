@@ -71,7 +71,7 @@ public class Facade implements FacadeModel {
     }
 
     boolean updateOrganisation(Position position) {
-        return positionModel.updateOrganisation(position);
+        return positionModel.updatePosition(position);
     }
 
     List<Position> getListOfPos() {

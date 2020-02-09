@@ -3,6 +3,7 @@ package my.project.servlet.test.model.impl;
 import my.project.servlet.test.model.domain.Organisation;
 import my.project.servlet.test.model.domain.Position;
 import my.project.servlet.test.model.domain.Worker;
+import my.project.servlet.test.service.DataBaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,11 +11,6 @@ import java.util.List;
 
 public class PositionModelImpl implements PositionModel {
 
-    private final String HOST = "jdbc:mysql://localhost:3306/mydbtest";
-    private final String USERNAME = "root";
-    private final String PASSWORD = "admin";
-
-    //public final String ADD_POSITION = "INSERT INTO organisation_workers (name,address,director) VALUES(?,?,?)";
     public final String SELECT_POSITION_BY_WORKER_ID = "SELECT position FROM organisation_workers WHERE worker_id=?";
     public final String SELECT_POSITION_BY_ORGANISATION_ID = "SELECT position FROM organisation_workers WHERE organisation_id=?";
     public final String SELECT_ALL_POSITION = "SELECT distinct position FROM organisation_workers";
@@ -22,27 +18,12 @@ public class PositionModelImpl implements PositionModel {
     public final String UPDATE_POSITION = "UPDATE organisation_workers SET position=?,salary=? WHERE worker_id=? and organisation_id=?";
     Connection connection;
 
-    public PositionModelImpl() {
-        try {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+    public PositionModelImpl() throws SQLException {
+        connection = DataBaseConnection.getInstance().getConnection();
 
-            connection = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
-
-            if (!connection.isClosed()) {
-                System.out.println();
-                System.out.println("база данных подключена" + "\n");
-            }
-        } catch (SQLException e) {
-            System.out.println("Подключение к Базе Данных сорвалось");
-
-
-        }
 
     }
+
 
     @Override
     public boolean updatePosition(Position position) {

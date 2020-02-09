@@ -2,16 +2,16 @@ package my.project.servlet.test.model.impl;
 
 import my.project.servlet.test.model.domain.Organisation;
 import my.project.servlet.test.model.domain.Worker;
+import my.project.servlet.test.service.DataBaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrganisationModelImpl implements OrganisationModel {
-
-    private final String HOST = "jdbc:mysql://localhost:3306/mydbtest";
-    private final String USERNAME = "root";
-    private final String PASSWORD = "admin";
 
     public final String ADD_ORGANISATION = "INSERT INTO organisation (name,address,director) VALUES(?,?,?)";
     public final String SELECT_ORGANISATION_BY_ID = "SELECT * FROM organisation WHERE id=?";
@@ -21,25 +21,8 @@ public class OrganisationModelImpl implements OrganisationModel {
     Connection connection;
 
 
-    public OrganisationModelImpl() {
-        try {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            connection = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
-
-            if (!connection.isClosed()) {
-                System.out.println();
-                System.out.println("база данных подключена" + "\n");
-            }
-        } catch (SQLException e) {
-            System.out.println("Подключение к Базе Данных сорвалось");
-
-
-        }
+    public OrganisationModelImpl() throws SQLException {
+        connection = DataBaseConnection.getInstance().getConnection();
 
     }
 
